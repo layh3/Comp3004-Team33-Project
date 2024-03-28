@@ -10,6 +10,7 @@ EEGHeadset::~EEGHeadset() {
 
 void EEGHeadset::checkContact() {
     // Implement logic to check contact of electrodes with the scalp
+    //Kesh comment to test pushing to the repo using git
 }
 
 void EEGHeadset::connect() {
