@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "TreatmentProtocol.h" // Include the TreatmentProtocol definition
+#include "TreatmentProtocol.h"
 
 class Session {
 private:
