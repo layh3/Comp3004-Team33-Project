@@ -140,8 +140,6 @@ void MainWindow::startNewSession() {
          sessionDuration = 60;
         sessionTimer->start(1000);
         ui->sessionProgressBar->setValue(0);
-
-        //FOR TESTING TO GET INTO NEW SESSION
         contactEstablished = true;
 }
 

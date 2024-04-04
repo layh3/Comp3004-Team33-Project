@@ -1,7 +1,12 @@
 #include "Session.h"
 
-Session::Session(int id) : sessionId(id) {
+Session::Session(int id)
+    : sessionId(id), currentTreatmentProtocol(1, 0.0f) {
+    //Protocol stuff just here to make it run, needs to be fixed
+
+
     // Constructor implementation could initialize member variables
+
 }
 
 Session::~Session() {

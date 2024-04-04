@@ -26,6 +26,9 @@ void NeuresetDevice::endSession() {
 
 Session* NeuresetDevice::getCurrentSession() const {
     // Return the current session
+
+    //TO BE REMOVED, CURRENTLY ALLOWING BUILD TO PASS
+    return nullptr;
 }
 
 void NeuresetDevice::lowBattery() {
