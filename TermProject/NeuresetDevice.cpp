@@ -1,23 +1,35 @@
 #include "NeuresetDevice.h"
+#include <QObject>
 
-NeuresetDevice::NeuresetDevice() : headset(nullptr), currentSession(nullptr) {
+NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), headset(new EEGHeadset()) {
     // Initialize the device, potentially set up the EEGHeadset
+    currentSession = new Session(sessionProgression);
+    sessionProgression++;
+    connect(headset, &EEGHeadset::connectionLost, this, &NeuresetDevice::handleConnectionLost);
 }
 
 NeuresetDevice::~NeuresetDevice() {
     // Clean up resources, including deleting the headset and currentSession if necessary
+    delete currentSession;
 }
 
 void NeuresetDevice::startSession() {
     // Logic to start a new session
+    if (headset->checkContact()) {
+        sessionState = true;
+    }else{
+        sessionState = false;
+    }
 }
 
 void NeuresetDevice::pauseSession() {
     // Logic to pause the current session
+    sessionState = false;
 }
 
 void NeuresetDevice::resumeSession() {
     // Logic to resume the current session
+    sessionState = true;
 }
 
 void NeuresetDevice::endSession() {
@@ -26,9 +38,11 @@ void NeuresetDevice::endSession() {
 
 Session* NeuresetDevice::getCurrentSession() const {
     // Return the current session
+    return currentSession;
+}
 
-    //TO BE REMOVED, CURRENTLY ALLOWING BUILD TO PASS
-    return nullptr;
+bool NeuresetDevice::getSessionState(){
+    return sessionState;
 }
 
 void NeuresetDevice::lowBattery() {
@@ -37,4 +51,8 @@ void NeuresetDevice::lowBattery() {
 
 void NeuresetDevice::powerOff() {
     // Logic to power off the device
+}
+
+void NeuresetDevice::handleConnectionLost(){
+    emit contactLost();
 }

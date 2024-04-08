@@ -3,19 +3,24 @@
 
 #include <vector>
 #include "Electrode.h"
+#include <QObject>
 
-class EEGHeadset {
+class EEGHeadset : public QObject {
+    Q_OBJECT
 private:
     bool isConnected;
-    std::vector<Electrode> electrodes;
+    std::vector<Electrode*> electrodes;
 
 public:
-    EEGHeadset();
+    EEGHeadset(QObject *parent = nullptr);
     ~EEGHeadset();
 
-    void checkContact();
+    bool checkContact();
     void connect();
     void disconnect();
+
+signals:
+    void connectionLost();
 };
 
 #endif // EEGHEADSET_H

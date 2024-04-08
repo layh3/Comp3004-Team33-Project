@@ -8,8 +8,10 @@ Electrode::~Electrode() {
     // Cleanup tasks if necessary
 }
 
-void Electrode::checkConnection() {
+bool Electrode::checkConnection() {
     // Implement the logic to check if the electrode is properly connected
+    connect();
+    return isConnected;
 }
 
 void Electrode::connect() {

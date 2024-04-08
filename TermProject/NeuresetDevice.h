@@ -4,17 +4,20 @@
 #include <string>
 #include "Session.h"
 #include "EEGHeadset.h"
+#include <QObject>
 
-class NeuresetDevice {
+class NeuresetDevice : public QObject {
+    Q_OBJECT
 private:
     int batteryLevel;
-    std::string sessionState;
+    bool sessionState;
     std::string currentEEGSite;
     EEGHeadset* headset;
     Session* currentSession;
+    int sessionProgression = 0;
 
 public:
-    NeuresetDevice();
+    NeuresetDevice(QObject *parent = nullptr);
     ~NeuresetDevice();
 
     void startSession();
@@ -22,8 +25,13 @@ public:
     void resumeSession();
     void endSession();
     Session* getCurrentSession() const;
+    bool getSessionState();
     void lowBattery();
     void powerOff();
+    void handleConnectionLost();
+
+signals:
+    void contactLost();
 };
 
 #endif // NEURESETDEVICE_H

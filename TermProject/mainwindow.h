@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include "NeuresetDevice.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,6 +24,7 @@ private slots:
     void onPowerButtonClicked();
     void turnOnRedLight();
     void turnOffRedLight();
+    void toggleRedLight();
     void turnOnBlueLight();
     void turnOffBlueLight();
     void turnOnGreenLight();
@@ -46,5 +48,8 @@ private:
     QTimer *contactLostTimer;
     int sessionDuration;
     bool contactEstablished;
+    NeuresetDevice *neuresetDevice;
+    QTimer *redLightTimer;
+    bool redLightOn;
 };
 #endif // MAINWINDOW_H
