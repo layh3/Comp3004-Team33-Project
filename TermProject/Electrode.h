@@ -10,7 +10,7 @@ public:
     Electrode(int id); // Constructor that takes an ID
     ~Electrode(); // Destructor
 
-    void checkConnection();
+    bool checkConnection();
     void connect();
     void disconnect();
     // Potentially more functions related to signal measurement
