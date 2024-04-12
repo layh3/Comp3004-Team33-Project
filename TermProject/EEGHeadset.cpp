@@ -1,7 +1,7 @@
 #include "EEGHeadset.h"
 #include <QDebug>
 
-#define ELECTRODE_NUMBER 21
+#define ELECTRODE_NUMBER 1
 
 EEGHeadset::EEGHeadset(QObject *parent) : QObject(parent), isConnected(false) {
     // Constructor logic, such as initializing electrodes if necessary
@@ -18,17 +18,20 @@ EEGHeadset::~EEGHeadset() {
     }
 }
 
-bool EEGHeadset::checkContact() {
+bool EEGHeadset::makeContactWithUSer() {
     // Implement logic to check contact of electrodes with the scalp
     connect();
     return isConnected;
 }
 
 void EEGHeadset::connect() {
-    // Logic to establish a connection, possibly setting isConnected to true
+    // Logic to establish a connection and start readiing brain signals
     // Loops through electrodes, checking the connection of each one. Returns false if any connections fail.
     for(auto& electrode : electrodes){
-        electrode->checkConnection();
+
+        electrode->connectElectrode();
+        electrode->initiateOperation();
+
         if(!electrode->checkConnection()){
             isConnected = false;
             return;

@@ -257,6 +257,26 @@
      <widget class="QWidget" name="page_3"/>
     </widget>
    </widget>
+   <widget class="QCustomPlot" name="wavePlot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>30</y>
+      <width>301</width>
+      <height>121</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="electrodeSelection">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>30</y>
+      <width>45</width>
+      <height>26</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -270,6 +290,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

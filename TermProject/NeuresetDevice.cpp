@@ -15,7 +15,7 @@ NeuresetDevice::~NeuresetDevice() {
 
 void NeuresetDevice::startSession() {
     // Logic to start a new session
-    if (headset->checkContact()) {
+    if (headset->makeContactWithUSer()) {
         sessionState = true;
     }else{
         sessionState = false;

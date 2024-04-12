@@ -30,6 +30,9 @@ public:
     void powerOff();
     void handleConnectionLost();
 
+    //----------------------------------------
+    void activateHeadset();
+
 signals:
     void contactLost();
 };
