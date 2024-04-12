@@ -4,6 +4,9 @@
 #include <QTimer>
 #include <QDebug>
 
+
+// problems 2: //>>>>>>>>>>>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -38,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Connect menu button click to showing the menu
     connect(ui->menuButton, &QPushButton::clicked, [this]() {
+
+        //>>>>>>>>>>>   check for power on here otherwise seesion is started even if powerr is off
+
         ui->mainDisplay->setCurrentIndex(0); // Show menu page
     });
 
@@ -52,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Timer setups
     sessionTimer->setInterval(1000); // 1000 ms = 1 second
     redLightTimer = new QTimer(this);
-    contactLostTimer->setInterval(300000);
+    contactLostTimer->setInterval(300);
     connect(contactLostTimer, &QTimer::timeout, this, &MainWindow::sessionTimeout);
     connect(redLightTimer, &QTimer::timeout, this, &MainWindow::toggleRedLight);
     connect(sessionTimer, &QTimer::timeout, this, &MainWindow::updateSessionProgress);
@@ -62,6 +68,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Adding reception for neuresetDevice signal
     connect(neuresetDevice, &NeuresetDevice::contactLost, this, &MainWindow::handleContactLost);
+
+
+
+    // graphb test
+
+    showSessionLog();
+
 
 
 
@@ -207,7 +220,7 @@ void MainWindow::startNewSession() {
 }
 
 void MainWindow::updateSessionProgress() {
-    if (!contactEstablished) {
+    if (!contactEstablished) {     // >>>>>>> big problem here, contact established is never updated
         turnOnRedLight();
         // Device starts beeping, handle accordingly
         contactLostTimer->start(); // Start or continue the 5-minute countdown
@@ -256,6 +269,45 @@ void MainWindow::sessionTimeout() {
 
 void MainWindow::showSessionLog() {
     // Show session log view
+
+
+	// this is a graph test, u should remove the rest of the code in this function
+    // add two new graphs and set their look:
+    ui->wavePlot->addGraph();
+    ui->wavePlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
+    ui->wavePlot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20))); // first graph will be filled with translucent blue
+    ui->wavePlot->addGraph();
+    ui->wavePlot->graph(1)->setPen(QPen(Qt::red)); // line color red for second graph
+    // generate some points of data (y0 for first, y1 for second graph):
+    QVector<double> x(200), y0(200);  //, y1(251);
+    for (int i=0; i<20; ++i)
+    {
+      x[i] = i;
+      y0[i] = qCos(i/0.03) + qCos(i/0.11) + qCos(i/10); // exponentially decaying cosin
+    }
+    // configure right and top axis to show ticks but no labels:
+    // (see QCPAxisRect::setupFullAxesBox for a quicker method to do this)
+    ui->wavePlot->xAxis2->setVisible(true);
+    ui->wavePlot->xAxis2->setTickLabels(false);
+    ui->wavePlot->yAxis2->setVisible(true);
+    ui->wavePlot->yAxis2->setTickLabels(false);
+
+    // make left and bottom axes always transfer their ranges to right and top axes:
+    connect(ui->wavePlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->xAxis2, SLOT(setRange(QCPRange)));
+    connect(ui->wavePlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->yAxis2, SLOT(setRange(QCPRange)));
+
+    // pass data points to graphs:
+    ui->wavePlot->graph(0)->setData(x, y0);
+
+    // let the ranges scale themselves so graph 0 fits perfectly in the visible area:
+    ui->wavePlot->graph(0)->rescaleAxes();
+
+
+    // Note: we could have also just called ui->wavePlot->rescaleAxes(); instead
+    // Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
+    ui->wavePlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+
+
 }
 
 void MainWindow::showDateTimeSetting() {
