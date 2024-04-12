@@ -55,6 +55,3 @@ private:
 #endif // MAINWINDOW_H
 
 
-// small test
-//bigger test
-
