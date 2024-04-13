@@ -21,7 +21,8 @@ public:
 
 
     //-----------------------------
-    void activateElectrodes();
+
+    void endElectrodeOperations();  // this is only used if the ui stop button is pressed, disconnection is treated differently
 
 signals:
     void connectionLost();
