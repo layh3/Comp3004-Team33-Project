@@ -66,8 +66,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Making the Neureset Device
     neuresetDevice = new NeuresetDevice();
 
-    //Adding reception for neuresetDevice signal
+    //Adding reception for neuresetDevice signals
     connect(neuresetDevice, &NeuresetDevice::contactLost, this, &MainWindow::handleContactLost);
+    connect(neuresetDevice, &NeuresetDevice::deadBattery, this, &MainWindow::handleDeadBattery);
 
 
 
@@ -127,6 +128,7 @@ void MainWindow::onPowerButtonClicked() {
         qDebug() << "Powering on";
         ui->mainDisplay->setCurrentIndex(0);
         ui->mainDisplay->show();
+        setBatteryLevel(neuresetDevice->getBatteryLevel());
     } else {
         qDebug() << "Powering off";
         ui->mainDisplay->setCurrentIndex(0);
@@ -192,7 +194,7 @@ void MainWindow::updateBatteryIndicatorStyle(int chargeLevel) {
                                                        "QProgressBar { border: 2px solid grey; border-radius: 5px; }").arg(color));
 }
 
-void MainWindow::setBatteryLevel(int level) {
+void MainWindow::setBatteryLevel(int level) {  //always call this function with 'neuresetDevice->getBatteryLevel()' as the level
     ui->batteryChargeIndicator->setValue(level);
     updateBatteryIndicatorStyle(level);
 }
@@ -229,6 +231,16 @@ void MainWindow::updateSessionProgress() {
         contactLostTimer->stop();
         // Update session progress bar and time remaining display
         elapsedTime++; // Increment each second
+
+        if (elapsedTime % 10 == 0){           //every 10 seconds, reduce battery by 1%
+            int curr = neuresetDevice->getBatteryLevel() - 1;
+            neuresetDevice->setBatteryLevel(curr);  //setting battery level in NeuresetDevice
+            setBatteryLevel(neuresetDevice->getBatteryLevel());  //setting battery level in mainwindow
+            if(curr <= 0) {
+                neuresetDevice->lowBattery(); //a bit convoluted, but will be  nice if we want additional functionality from device low battery func
+            }
+        }
+
         int minutes = elapsedTime / 60;
         int seconds = elapsedTime % 60;
         ui->sessionTimerLabel->setText(QString("%1:%2").arg(minutes, 2, 10, QLatin1Char('0')).arg(seconds, 2, 10, QLatin1Char('0')));
@@ -312,4 +324,9 @@ void MainWindow::showSessionLog() {
 
 void MainWindow::showDateTimeSetting() {
     // Show date and time setting UI
+}
+
+void MainWindow::handleDeadBattery() {
+    qDebug() << "Battery dead. Shutting down device";
+    onPowerButtonClicked();
 }

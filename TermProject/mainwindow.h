@@ -39,6 +39,7 @@ private slots:
     void sessionTimeout();
     void showSessionLog();
     void showDateTimeSetting();
+    void handleDeadBattery();
 
 private:
     Ui::MainWindow *ui;
