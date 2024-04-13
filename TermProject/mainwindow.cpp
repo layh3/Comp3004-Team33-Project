@@ -126,6 +126,8 @@ void MainWindow::onPowerButtonClicked() {
         qDebug() << "Powering off";
         ui->mainDisplay->setCurrentIndex(0);
         ui->mainDisplay->hide();
+        ui->batteryChargeIndicator->setValue(0);
+        updateBatteryIndicatorStyle(0);
         neuresetDevice->powerOff();
         turnOffRedLight();
         turnOffBlueLight();
