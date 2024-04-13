@@ -1,8 +1,10 @@
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QDateTime>
 #include "NeuresetDevice.h"
 
 QT_BEGIN_NAMESPACE
@@ -31,6 +33,7 @@ private slots:
     void turnOffGreenLight();
     void updateBatteryIndicatorStyle(int);
     void setBatteryLevel(int);
+    void handleDeadBattery();
 
     //Menu Slots
     void startNewSession();
@@ -39,7 +42,12 @@ private slots:
     void sessionTimeout();
     void showSessionLog();
     void showDateTimeSetting();
-    void handleDeadBattery();
+    void onCancelMenuSetting();
+    void onSubmitDateTimeSetting();
+
+    //Internal Clock
+    void startTimedOperations();
+    void performTimedOperation();
 
 private:
     Ui::MainWindow *ui;
@@ -52,10 +60,7 @@ private:
     NeuresetDevice *neuresetDevice;
     QTimer *redLightTimer;
     bool redLightOn;
+    QDateTime selectedDateTime;
 };
 #endif // MAINWINDOW_H
-
-
-// small test
-//bigger test
 
