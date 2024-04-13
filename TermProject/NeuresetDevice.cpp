@@ -1,7 +1,7 @@
 #include "NeuresetDevice.h"
 #include <QObject>
 
-NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), headset(new EEGHeadset()) {
+NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), batteryLevel(76), headset(new EEGHeadset()) {
     // Initialize the device, potentially set up the EEGHeadset
     currentSession = new Session(sessionProgression);
     sessionProgression++;
@@ -47,12 +47,25 @@ bool NeuresetDevice::getSessionState(){
 
 void NeuresetDevice::lowBattery() {
     // Logic for low battery indication
+    batteryLevel = 0;
+    emit deadBattery();
 }
 
 void NeuresetDevice::powerOff() {
     // Logic to power off the device
+    currentSession = nullptr;
+    sessionState = false;
+    sessionProgression = 0;
 }
 
 void NeuresetDevice::handleConnectionLost(){
     emit contactLost();
+}
+
+int NeuresetDevice::getBatteryLevel() {
+    return batteryLevel;
+}
+
+void NeuresetDevice::setBatteryLevel(int level) {
+    batteryLevel = level;
 }
