@@ -42,12 +42,12 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     //Default to blank display until menu is clicked
-    ui->mainDisplay->setCurrentIndex(2);
+    ui->mainDisplay->setCurrentIndex(4);
 
     // Connect menu actions to slots
     connect(ui->newSessionButton, &QPushButton::clicked, this, &MainWindow::startNewSession);
-    //connect(sessionLogAction, &QAction::triggered, this, &MainWindow::showSessionLog);
-    //connect(dateTimeSettingAction, &QAction::triggered, this, &MainWindow::showDateTimeSetting);
+    connect(ui->sessionLogButton, &QPushButton::clicked, this, &MainWindow::showSessionLog);
+    connect(ui->dateAndTimeButton, &QPushButton::clicked, this, &MainWindow::showDateTimeSetting);
 
     //Timer setups
     sessionTimer->setInterval(1000); // 1000 ms = 1 second
@@ -63,7 +63,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //Adding reception for neuresetDevice signal
     connect(neuresetDevice, &NeuresetDevice::contactLost, this, &MainWindow::handleContactLost);
 
+    //Adding date and time buttons
+    connect(ui->CancelButton, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
+    connect(ui->SubmitButton, &QPushButton::clicked, this, &MainWindow::onSubmitDateTimeSetting);
 
+    //Addition SessionLogButtons
+     connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
 
 }
 
@@ -256,8 +261,36 @@ void MainWindow::sessionTimeout() {
 
 void MainWindow::showSessionLog() {
     // Show session log view
+    ui->mainDisplay->setCurrentIndex(3);
 }
 
 void MainWindow::showDateTimeSetting() {
     // Show date and time setting UI
+    ui->mainDisplay->setCurrentIndex(2);
+}
+
+void MainWindow::onCancelMenuSetting() {
+    ui->mainDisplay->setCurrentIndex(0); // Switch back to the main menu
+}
+
+void MainWindow::onSubmitDateTimeSetting() {
+    selectedDateTime = ui->dateTimeEdit->dateTime();
+    qDebug() << "Selected Date and Time:" << selectedDateTime.toString("yyyy-MM-dd HH:mm:ss");
+    startTimedOperations();
+    ui->mainDisplay->setCurrentIndex(0);
+}
+
+//To keep track of internal clock
+void MainWindow::startTimedOperations() {
+    QTimer *operationTimer = new QTimer(this);
+    connect(operationTimer, &QTimer::timeout, this, &MainWindow::performTimedOperation);
+    operationTimer->start(1000); // Check or perform operations every second
+    if (powerOn == false) {
+        operationTimer->stop();
+    }
+
+}
+
+void MainWindow::performTimedOperation() {
+    selectedDateTime = selectedDateTime.addSecs(1);  // Simulate time passing
 }
