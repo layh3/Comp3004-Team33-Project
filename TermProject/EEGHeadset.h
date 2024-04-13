@@ -15,9 +15,13 @@ public:
     EEGHeadset(QObject *parent = nullptr);
     ~EEGHeadset();
 
-    bool checkContact();
+    bool makeContactWithUSer();
     void connect();
     void disconnect();
+
+
+    //-----------------------------
+    void activateElectrodes();
 
 signals:
     void connectionLost();

@@ -1,3 +1,4 @@
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -32,6 +33,7 @@ private slots:
     void turnOffGreenLight();
     void updateBatteryIndicatorStyle(int);
     void setBatteryLevel(int);
+    void handleDeadBattery();
 
     //Menu Slots
     void startNewSession();
