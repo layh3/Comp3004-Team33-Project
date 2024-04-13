@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QDateTime>
 #include "NeuresetDevice.h"
 
 QT_BEGIN_NAMESPACE
@@ -39,6 +40,12 @@ private slots:
     void sessionTimeout();
     void showSessionLog();
     void showDateTimeSetting();
+    void onCancelMenuSetting();
+    void onSubmitDateTimeSetting();
+
+    //Internal Clock
+    void startTimedOperations();
+    void performTimedOperation();
 
 private:
     Ui::MainWindow *ui;
@@ -51,7 +58,7 @@ private:
     NeuresetDevice *neuresetDevice;
     QTimer *redLightTimer;
     bool redLightOn;
+    QDateTime selectedDateTime;
 };
 #endif // MAINWINDOW_H
 
-// testing testing
