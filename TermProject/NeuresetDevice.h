@@ -32,12 +32,9 @@ public:
 
     //----------------------------------------
     void activateHeadset();
-    int getBatteryLevel();
-    void setBatteryLevel(int level);
 
 signals:
     void contactLost();
-    void deadBattery();
 };
 
 #endif // NEURESETDEVICE_H

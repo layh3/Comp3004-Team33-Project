@@ -28,6 +28,7 @@ private:
 
     double wavefunction; // combined function of 3 sine waves
 
+    QTimer *disconnectedTimer;
     QTimer *operationTimer;
     int operationTimeElapsed;
 public:
@@ -52,11 +53,12 @@ public:
     };
 
     void initiateOperation();
-    void cleanUpOperation();
+
 
 
 private slots:
     void runOperation();
+    void operationEndSequence();
 
 
 
