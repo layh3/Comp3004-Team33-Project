@@ -314,3 +314,5 @@ void MainWindow::handleDeadBattery() {
     qDebug() << "Battery dead. Shutting down device";
     onPowerButtonClicked();
 }
+
+//Merge To Fix Issues
