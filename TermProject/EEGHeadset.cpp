@@ -21,50 +21,29 @@ EEGHeadset::~EEGHeadset() {
 bool EEGHeadset::makeContactWithUSer() {
     // Implement logic to check contact of electrodes with the scalp
     connect();
-
-    for(auto& electrode : electrodes){
-
-        electrode->initiateOperation(); // activate electrodes
-    }
-
     return isConnected;
 }
 
 void EEGHeadset::connect() {
-    // Logic to establish a connection and start readsing brain signals
-    // Loops through and connects electrodes .
+    // Logic to establish a connection and start readiing brain signals
+    // Loops through electrodes, checking the connection of each one. Returns false if any connections fail.
     for(auto& electrode : electrodes){
 
         electrode->connectElectrode();
+        electrode->initiateOperation();
+
+        if(!electrode->checkConnection()){
+            isConnected = false;
+            return;
+        }
+        //qDebug() << "Connecting Electrode";
     }
     isConnected = true;
 }
 
-
-// when a helmet is taken of all electrodes connected to it should also be taken off hence all electrodes become disconnected
 void EEGHeadset::disconnect() {
-
-    for(auto& electrode : electrodes){
-
-        electrode->disconnectElectrode();
-    }
-
+    // Logic to disconnect, possibly setting isConnected to false
     // Emits connectionLost to NeuresetDevice, which then emits to mainwindow for easier testing of connection loss.
     isConnected = false;
     emit connectionLost();
 }
-
-
-
-void EEGHeadset::endElectrodeOperations()
-{
-
-}
-
-
-
-
-
-
-
-
