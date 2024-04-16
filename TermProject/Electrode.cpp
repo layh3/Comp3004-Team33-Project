@@ -3,15 +3,13 @@
 
 
 
-Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnectedTimer(new QTimer(this)), operationTimer(new QTimer(this)) {
+Electrode::Electrode(int id) : electrodeId(id), isConnected(false), operationTimer(new QTimer(this)) {
     // Initialize the electrode with the given ID and as disconnected
-    // initialize the operation and disconnection timers
+    // initialize the operaation timer
 
-    disconnectedTimer->setInterval(3000); // if u change this also cchange the contactlosttimer in Mainwindow
     operationTimer->setInterval(1000);
-
     connect(operationTimer, &QTimer::timeout, this, &Electrode::runOperation);
-    connect(disconnectedTimer, &QTimer::timeout, this, &Electrode::operationEndSequence);
+
 }
 
 Electrode::~Electrode() {
@@ -53,8 +51,6 @@ void Electrode::disconnectElectrode() {
 
      operationTimer->start();
 
-     qInfo("operation started for electrode %d ",electrodeId);
-
  }
 
 
@@ -62,64 +58,23 @@ void Electrode::disconnectElectrode() {
  void Electrode::runOperation() {
 
      if(isConnected){
-
-         disconnectedTimer->stop();
-
          operationTimeElapsed++; // Increment each second
          int seconds = operationTimeElapsed % 60;
 
          xGraphForm.append(seconds);
          yGraphForm.append( calculateWaveFormYCoordinate(seconds) );
-
-         qInfo("electrode %d : operation time elapsed =  %d",electrodeId, operationTimeElapsed);
-
      }
      else{
-
-         //  if disconnected start the disconnect timer, if reconnection doesnt occer the operation will end along with the session
-
-         qInfo("electrode %d is diconnected",electrodeId);
-         disconnectedTimer->start();
+         printf("electrode %d is diconnected",electrodeId);
+         operationTimer->stop();
      }
 
-     if(operationTimeElapsed >= 50){
-
-         operationEndSequence();
+     if(operationTimeElapsed > 50){
+         operationTimer->stop();
      }
 
 
  }
-
-
-
-
-
- void Electrode::operationEndSequence(){
-     // reset all operattion  related  variables and datastructures for the next operrationn
-
-     opFrequency1 = 0 ;
-     opFrequency2 = 0;
-     opFrequency3 = 0;
-
-     opAmplitude1 = 0;
-     opAmplitude2 = 0;
-     opAmplitude3 = 0;
-
-
-
-     xGraphForm.clear();
-     yGraphForm.clear();
-
-     operationTimer->stop();
-     disconnectedTimer->stop();
-
-     isConnected = false;
-
-     qInfo("Operation ended for electrode %d",electrodeId);
-
- }
-
-
 
 
 

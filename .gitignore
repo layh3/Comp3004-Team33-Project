@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# pdf
+Comp 3004 Use Cases.pdf
+
+# zip
+Comp3004TermProjectDraft.zip
