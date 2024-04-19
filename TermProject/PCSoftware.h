@@ -5,7 +5,7 @@
 
 class PCSoftware {
 private:
-    SessionLog sessionLog; // Composition relationship with SessionLog
+    //SessionLog sessionLog; // Composition relationship with SessionLog // sessionlog has been removed
 
 public:
     PCSoftware(); // Constructor
