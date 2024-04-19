@@ -71,20 +71,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(neuresetDevice, &NeuresetDevice::deadBattery, this, &MainWindow::sessionTimeout);
       
     // setup default electrode info display
-    ui->electrodeSelection->setValue(0);
-    ui->electrodeSelection->setRange(0,9); // this needs to be changed if u change the number of electrodes // we should jave a defs.h to standardize this
+    //ui->electrodeSelection->setValue(0);
+    //ui->electrodeSelection->setRange(0,9); // this needs to be changed if u change the number of electrodes // we should jave a defs.h to standardize this
 
     // keep track of actively selected eletctrode
-    ElectrodeInDisplay = neuresetDevice->displayElectrode( ui->electrodeSelection->value(), ui->electrodeSelection->value());
+    //ElectrodeInDisplay = neuresetDevice->displayElectrode( ui->electrodeSelection->value(), ui->electrodeSelection->value());
 
     // change active eleectrode if selection changed
-    connect(ui->electrodeSelection, QOverload<int>::of(&QSpinBox::valueChanged), this, [this]() {
+    //connect(ui->electrodeSelection, QOverload<int>::of(&QSpinBox::valueChanged), this, [this]() {
 
-        qDebug()<< "updating displayed electrode";
-        ElectrodeInDisplay = neuresetDevice->displayElectrode( ui->electrodeSelection->value(), ElectrodeInDisplay->getId());
-        updateWavePlot();
+        //qDebug()<< "updating displayed electrode";
+        //ElectrodeInDisplay = neuresetDevice->displayElectrode( ui->electrodeSelection->value(), ElectrodeInDisplay->getId());
+        //updateWavePlot();
 
-    });
+    //});
 
     //Adding date and time buttons
     connect(ui->CancelButton, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
@@ -275,7 +275,6 @@ void MainWindow::updateSessionProgress() {
         int seconds = elapsedTime % 60;
         ui->sessionTimerLabel->setText(QString("%1:%2").arg(minutes, 2, 10, QLatin1Char('0')).arg(seconds, 2, 10, QLatin1Char('0')));
 
-        //PROGRESS BAR UPDATING TO BE FINISHED
         int progress = static_cast<int>((static_cast<double>(elapsedTime) / sessionDuration) * 100);
         ui->sessionProgressBar->setValue(progress); // Update progress bar
         updateWavePlot();
