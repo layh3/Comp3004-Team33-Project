@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     redLightOn(false)
 {
     ui->setupUi(this);
+    ui->pcUiWidget->setVisible(false);
 
 
     //pause, play and stop button clicks
@@ -70,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Addition SessionLogButtons
      connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
+     connect(ui->ViewSessionButton, &QPushButton::clicked, this, &MainWindow::viewSelectedSession);
+     connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::hidePcUiWidget);
 
 }
 
@@ -295,14 +298,34 @@ void MainWindow::onSubmitDateTimeSetting() {
     ui->mainDisplay->setCurrentIndex(0);
 }
 
+void MainWindow::viewSelectedSession() {
+    QListWidgetItem *selectedItem = ui->sessionLogList->currentItem();
+    if (selectedItem) {
+        QString sessionDetails = selectedItem->data(Qt::UserRole).toString();
+
+        // Assuming you have a QLabel within pcUiWidget to display details
+        //ui->detailsLabel->setText(sessionDetails); // Make sure you have this label in your pcUiWidget
+
+        // Make the pcUiWidget visible
+        ui->pcUiWidget->setVisible(true);
+    } else {
+        qDebug() << "No session selected. Please select a session to view details.";
+        ui->pcUiWidget->setVisible(true);
+    }
+}
+
+void MainWindow::hidePcUiWidget() {
+    ui->pcUiWidget->setVisible(false);
+}
+
+
 //To keep track of internal clock
 void MainWindow::startTimedOperations() {
-    QTimer *operationTimer = new QTimer(this);
-    connect(operationTimer, &QTimer::timeout, this, &MainWindow::performTimedOperation);
-    operationTimer->start(1000); // Check or perform operations every second
-    if (powerOn == false) {
-        operationTimer->stop();
+    if (!operationTimer) {
+        operationTimer = new QTimer(this);
+        connect(operationTimer, &QTimer::timeout, this, &MainWindow::performTimedOperation);
     }
+    operationTimer->start(1000); // Check or perform operations every second
 
 }
 

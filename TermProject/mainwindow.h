@@ -44,6 +44,8 @@ private slots:
     void showDateTimeSetting();
     void onCancelMenuSetting();
     void onSubmitDateTimeSetting();
+    void viewSelectedSession();
+    void hidePcUiWidget();
 
     //Internal Clock
     void startTimedOperations();
@@ -61,6 +63,7 @@ private:
     QTimer *redLightTimer;
     bool redLightOn;
     QDateTime selectedDateTime;
+    QTimer *operationTimer;
 };
 #endif // MAINWINDOW_H
 
