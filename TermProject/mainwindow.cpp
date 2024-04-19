@@ -4,9 +4,6 @@
 #include <QTimer>
 #include <QDebug>
 
-
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -14,11 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     sessionTimer(new QTimer(this)),
     elapsedTime(0),
     contactLostTimer(new QTimer(this)),
-    sessionDuration(5*60),  // this is changed to 60 later in start session
+    sessionDuration(5*60),
     contactEstablished(false),
     redLightOn(false)
 {
     ui->setupUi(this);
+    ui->pcUiWidget->setVisible(false);
 
 
     //pause, play and stop button clicks
@@ -55,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dateAndTimeButton, &QPushButton::clicked, this, &MainWindow::showDateTimeSetting);
 
     //Timer setups
-    sessionTimer->setInterval(1000); // 1000 ms = 1 second //>>>>>> sends a timeout signal every second
+    sessionTimer->setInterval(1000); // 1000 ms = 1 second
     redLightTimer = new QTimer(this);
     redLightTimer->setInterval(1000);
     contactLostTimer->setInterval(5000); // if u change this also change the disconnnecteddtimer in electrodes
@@ -67,13 +65,11 @@ MainWindow::MainWindow(QWidget *parent) :
     neuresetDevice = new NeuresetDevice();
 
     //Adding reception for neuresetDevice signal
-    connect(neuresetDevice, &NeuresetDevice::contactLost, this, &MainWindow::handleContactLost); //>>>>  this deals with headset disconnection
-
-
+    connect(neuresetDevice, &NeuresetDevice::contactLost, this, &MainWindow::handleContactLost);
+      
     // adding response to neuroset battery power lost
     connect(neuresetDevice, &NeuresetDevice::deadBattery, this, &MainWindow::sessionTimeout);
-
-
+      
     // setup default electrode info display
     ui->electrodeSelection->setValue(0);
     ui->electrodeSelection->setRange(0,9); // this needs to be changed if u change the number of electrodes // we should jave a defs.h to standardize this
@@ -90,19 +86,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     });
 
-
     //Adding date and time buttons
     connect(ui->CancelButton, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
     connect(ui->SubmitButton, &QPushButton::clicked, this, &MainWindow::onSubmitDateTimeSetting);
-
+      
     onSubmitDateTimeSetting(); // running this so that selected date time has something initially
 
     //Addition SessionLogButtons
      connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
+     connect(ui->ViewSessionButton, &QPushButton::clicked, this, &MainWindow::viewSelectedSession);
+     connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::hidePcUiWidget);
 
 }
-
-
 
 MainWindow::~MainWindow()
 {
@@ -110,9 +105,6 @@ MainWindow::~MainWindow()
     delete sessionTimer;
     delete contactLostTimer;
 }
-
-
-
 
 //Main buttons
 void MainWindow::onPlayClicked() {
@@ -177,13 +169,11 @@ void MainWindow::onPowerButtonClicked() {
 void MainWindow::turnOnRedLight() {
     //ui->lightIndicatorRed->setStyleSheet("QLabel { background-color: red; border-radius: 10px; }");
     redLightTimer->start(500);
-    // qDebug() << "red light was turned on";
 }
 
 void MainWindow::turnOffRedLight() {
     redLightTimer->stop();
     ui->lightIndicatorRed->setStyleSheet("QLabel { background-color: darkred; border-radius: 10px; }");
-    // qDebug() << "red light was turned off";
 }
 
 void MainWindow::toggleRedLight(){
@@ -196,7 +186,6 @@ void MainWindow::toggleRedLight(){
         }
         redLightOn = !redLightOn;
 }
-
 
 void MainWindow::turnOnBlueLight() {
     ui->lightIndicatorBlue->setStyleSheet("QLabel { background-color: blue; border-radius: 10px; }");
@@ -229,7 +218,7 @@ void MainWindow::updateBatteryIndicatorStyle(int chargeLevel) {
                                                        "QProgressBar { border: 2px solid grey; border-radius: 5px; }").arg(color));
 }
 
-void MainWindow::setBatteryLevel(int level) {     //always call this function with 'neuresetDevice->getBatteryLevel()' as the level
+void MainWindow::setBatteryLevel(int level) {  //always call this function with 'neuresetDevice->getBatteryLevel()' as the level
     ui->batteryChargeIndicator->setValue(level);
     updateBatteryIndicatorStyle(level);
 }
@@ -331,7 +320,6 @@ void MainWindow::sessionTimeout() {
 void MainWindow::showSessionLog() {
     // Show session log view
     ui->mainDisplay->setCurrentIndex(3);
-
 }
 
 void MainWindow::showDateTimeSetting() {
@@ -339,30 +327,45 @@ void MainWindow::showDateTimeSetting() {
     ui->mainDisplay->setCurrentIndex(2);
 }
 
-
-
-
 void MainWindow::onCancelMenuSetting() {
     ui->mainDisplay->setCurrentIndex(0); // Switch back to the main menu
 }
 
 void MainWindow::onSubmitDateTimeSetting() {
-    selectedDateTime = ui->dateTimeEdit->dateTime();  // the ui datetime is not updated so session start time and end time are always eqqual
+    selectedDateTime = ui->dateTimeEdit->dateTime();
     qDebug() << "Selected Date and Time:" << selectedDateTime.toString("yyyy-MM-dd HH:mm:ss");
     startTimedOperations();
-
-    if(powerOn)
-        ui->mainDisplay->setCurrentIndex(0);
+    ui->mainDisplay->setCurrentIndex(0);
 }
+
+void MainWindow::viewSelectedSession() {
+    QListWidgetItem *selectedItem = ui->sessionLogList->currentItem();
+    if (selectedItem) {
+        QString sessionDetails = selectedItem->data(Qt::UserRole).toString();
+
+        // Assuming you have a QLabel within pcUiWidget to display details
+        //ui->detailsLabel->setText(sessionDetails); // Make sure you have this label in your pcUiWidget
+
+        // Make the pcUiWidget visible
+        ui->pcUiWidget->setVisible(true);
+    } else {
+        qDebug() << "No session selected. Please select a session to view details.";
+        ui->pcUiWidget->setVisible(true);
+    }
+}
+
+void MainWindow::hidePcUiWidget() {
+    ui->pcUiWidget->setVisible(false);
+}
+
 
 //To keep track of internal clock
 void MainWindow::startTimedOperations() {
-    QTimer *operationTimer = new QTimer(this);
-    connect(operationTimer, &QTimer::timeout, this, &MainWindow::performTimedOperation);
-    operationTimer->start(1000); // Check or perform operations every second
-    if (powerOn == false) {
-        operationTimer->stop();
+    if (!operationTimer) {
+        operationTimer = new QTimer(this);
+        connect(operationTimer, &QTimer::timeout, this, &MainWindow::performTimedOperation);
     }
+    operationTimer->start(1000); // Check or perform operations every second
 
 }
 
@@ -375,38 +378,33 @@ void MainWindow::handleDeadBattery() {
     onPowerButtonClicked();
 }
 
-
-
-
-
-
 void MainWindow::startWavePlot() {  // used in displaying waveform
 
-    ui->wavePlot->addGraph();
-    ui->wavePlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
+    //ui->wavePlot->addGraph();
+    //ui->wavePlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
 
 
     // configure right and top axis to show ticks but no labels:
     // (see QCPAxisRect::setupFullAxesBox for a quicker method to do this)
-    ui->wavePlot->xAxis2->setVisible(true);
-    ui->wavePlot->xAxis2->setTickLabels(false);
-    ui->wavePlot->yAxis2->setVisible(true);
-    ui->wavePlot->yAxis2->setTickLabels(false);
+   // ui->wavePlot->xAxis2->setVisible(true);
+   // ui->wavePlot->xAxis2->setTickLabels(false);
+    //ui->wavePlot->yAxis2->setVisible(true);
+    //ui->wavePlot->yAxis2->setTickLabels(false);
 
     // make left and bottom axes always transfer their ranges to right and top axes:
-    connect(ui->wavePlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->xAxis2, SLOT(setRange(QCPRange)));
-    connect(ui->wavePlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->yAxis2, SLOT(setRange(QCPRange)));
+    //connect(ui->wavePlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->xAxis2, SLOT(setRange(QCPRange)));
+    //connect(ui->wavePlot->yAxis, SIGNAL(rangeChanged(QCPRange)), ui->wavePlot->yAxis2, SLOT(setRange(QCPRange)));
 
     // pass data points to graphs:
-    ui->wavePlot->graph(0)->setData(ElectrodeInDisplay->xGraphForm  , ElectrodeInDisplay->yGraphForm);
+    //ui->wavePlot->graph(0)->setData(ElectrodeInDisplay->xGraphForm  , ElectrodeInDisplay->yGraphForm);
 
     // let the ranges scale themselves so graph 0 fits perfectly in the visible area:
-    ui->wavePlot->graph(0)->rescaleAxes();
+    //ui->wavePlot->graph(0)->rescaleAxes();
 
 
     // Note: we could have also just called ui->wavePlot->rescaleAxes(); instead
     // Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
-    ui->wavePlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    //ui->wavePlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
 
 
@@ -415,13 +413,9 @@ void MainWindow::startWavePlot() {  // used in displaying waveform
 void MainWindow::updateWavePlot() { // used in displaying waveform
 
 
-    ui->wavePlot->clearGraphs();
+    //ui->wavePlot->clearGraphs();
 
-    startWavePlot();
+    //startWavePlot();
 
-    ui->wavePlot->replot();
+    //ui->wavePlot->replot();
 }
-
-
-
-

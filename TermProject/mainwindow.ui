@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1132</width>
     <height>600</height>
    </rect>
   </property>
@@ -17,10 +17,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>180</y>
-      <width>361</width>
-      <height>231</height>
+      <x>210</x>
+      <y>130</y>
+      <width>301</width>
+      <height>261</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -32,8 +32,8 @@
     <widget class="QPushButton" name="pushButtonPause">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>180</y>
+       <x>60</x>
+       <y>220</y>
        <width>51</width>
        <height>25</height>
       </rect>
@@ -45,8 +45,8 @@
     <widget class="QPushButton" name="pushButtonPlay">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>180</y>
+       <x>120</x>
+       <y>220</y>
        <width>51</width>
        <height>25</height>
       </rect>
@@ -58,8 +58,8 @@
     <widget class="QPushButton" name="pushButtonStop">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>180</y>
+       <x>180</x>
+       <y>220</y>
        <width>51</width>
        <height>25</height>
       </rect>
@@ -71,7 +71,7 @@
     <widget class="QPushButton" name="powerButton">
      <property name="geometry">
       <rect>
-       <x>280</x>
+       <x>190</x>
        <y>10</y>
        <width>51</width>
        <height>25</height>
@@ -123,8 +123,8 @@
     <widget class="QProgressBar" name="batteryChargeIndicator">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>160</y>
+       <x>270</x>
+       <y>190</y>
        <width>16</width>
        <height>61</height>
       </rect>
@@ -142,8 +142,8 @@
     <widget class="QPushButton" name="menuButton">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>60</y>
+       <x>40</x>
+       <y>30</y>
        <width>41</width>
        <height>25</height>
       </rect>
@@ -155,30 +155,30 @@
     <widget class="QStackedWidget" name="mainDisplay">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>231</width>
+       <x>49</x>
+       <y>70</y>
+       <width>211</width>
        <height>131</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <widget class="QWidget" name="widget" native="true">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>20</y>
-         <width>120</width>
-         <height>80</height>
+         <x>20</x>
+         <y>0</y>
+         <width>171</width>
+         <height>111</height>
         </rect>
        </property>
        <widget class="QPushButton" name="newSessionButton">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>0</y>
+          <x>30</x>
+          <y>10</y>
           <width>101</width>
           <height>25</height>
          </rect>
@@ -190,8 +190,8 @@
        <widget class="QPushButton" name="sessionLogButton">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>20</y>
+          <x>30</x>
+          <y>40</y>
           <width>101</width>
           <height>25</height>
          </rect>
@@ -203,8 +203,8 @@
        <widget class="QPushButton" name="dateAndTimeButton">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>40</y>
+          <x>30</x>
+          <y>70</y>
           <width>101</width>
           <height>25</height>
          </rect>
@@ -219,10 +219,10 @@
       <widget class="QLabel" name="sessionTimerLabel">
        <property name="geometry">
         <rect>
-         <x>70</x>
+         <x>40</x>
          <y>20</y>
-         <width>101</width>
-         <height>31</height>
+         <width>131</width>
+         <height>61</height>
         </rect>
        </property>
        <property name="font">
@@ -240,8 +240,8 @@
       <widget class="QProgressBar" name="sessionProgressBar">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>70</y>
+         <x>50</x>
+         <y>90</y>
          <width>118</width>
          <height>23</height>
         </rect>
@@ -255,11 +255,21 @@
       </widget>
      </widget>
      <widget class="QWidget" name="page_4">
+      <widget class="QDateTimeEdit" name="dateTimeEdit">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>191</width>
+         <height>26</height>
+        </rect>
+       </property>
+      </widget>
       <widget class="QPushButton" name="CancelButton">
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>60</y>
+         <y>100</y>
          <width>61</width>
          <height>25</height>
         </rect>
@@ -272,7 +282,7 @@
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>60</y>
+         <y>100</y>
          <width>61</width>
          <height>25</height>
         </rect>
@@ -281,31 +291,8 @@
         <string>Submit</string>
        </property>
       </widget>
-      <widget class="QDateTimeEdit" name="dateTimeEdit">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>171</width>
-         <height>26</height>
-        </rect>
-       </property>
-      </widget>
      </widget>
      <widget class="QWidget" name="page_3">
-      <widget class="QPushButton" name="CancelButton_2">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>100</y>
-         <width>61</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="ViewSessionButton">
        <property name="geometry">
         <rect>
@@ -319,10 +306,23 @@
         <string>ViewSession</string>
        </property>
       </widget>
-      <widget class="QListWidget" name="sessionLogList">
+      <widget class="QPushButton" name="CancelButton_2">
        <property name="geometry">
         <rect>
          <x>20</x>
+         <y>100</y>
+         <width>61</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+      <widget class="QListWidget" name="sessionLogList">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
          <y>0</y>
          <width>201</width>
          <height>91</height>
@@ -333,25 +333,28 @@
      <widget class="QWidget" name="page_5"/>
     </widget>
    </widget>
-   <widget class="QCustomPlot" name="wavePlot" native="true">
+   <widget class="QWidget" name="pcUiWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>30</y>
-      <width>301</width>
-      <height>121</height>
+      <x>670</x>
+      <y>130</y>
+      <width>311</width>
+      <height>261</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QSpinBox" name="electrodeSelection">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>30</y>
-      <width>45</width>
-      <height>26</height>
-     </rect>
-    </property>
+    <widget class="QPushButton" name="closeButton">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>0</y>
+       <width>41</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>X</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -359,21 +362,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1132</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

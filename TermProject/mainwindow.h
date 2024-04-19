@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QDebug>
-#include "NeuresetDevice.h"
 #include <QDateTime>
+#include "NeuresetDevice.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -43,13 +43,13 @@ private slots:
     void showDateTimeSetting();
     void onCancelMenuSetting();
     void onSubmitDateTimeSetting();
-
+    void viewSelectedSession();
+    void hidePcUiWidget();
 
     //Internal Clock
     void startTimedOperations();
     void performTimedOperation();
-
-
+    
     // wave generation
     void startWavePlot();
     void updateWavePlot();
@@ -65,13 +65,8 @@ private:
     NeuresetDevice *neuresetDevice;
     QTimer *redLightTimer;
     bool redLightOn;
-    Electrode* ElectrodeInDisplay = 0;
     QDateTime selectedDateTime;
-
+    QTimer *operationTimer;
+    Electrode* ElectrodeInDisplay = 0;
 };
 #endif // MAINWINDOW_H
-
-
-// small test
-//bigger test
-
