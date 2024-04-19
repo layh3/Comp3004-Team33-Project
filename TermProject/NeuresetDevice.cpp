@@ -1,16 +1,21 @@
 #include "NeuresetDevice.h"
 #include <QObject>
 
-NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), batteryLevel(76), headset(new EEGHeadset()) {
+NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), batteryLevel(55), headset(new EEGHeadset()) {
     // Initialize the device, potentially set up the EEGHeadset
-    currentSession = new Session(sessionProgression);
-    sessionProgression++;
-    connect(headset, &EEGHeadset::connectionLost, this, &NeuresetDevice::handleConnectionLost);
+    sessionState = false;
+    //currentSession = new Session(sessionProgression);   // initialize tthis elsewhere
+
+    connect(headset, &EEGHeadset::connectionLost, this, &NeuresetDevice::handleConnectionLost); // occurs when electrode is disconnected
+
+    // set up response for incoming session object data
+    connect(headset, &EEGHeadset::frequencyList, this, &NeuresetDevice::updateSessionObject);
 }
 
 NeuresetDevice::~NeuresetDevice() {
     // Clean up resources, including deleting the headset and currentSession if necessary
-    delete currentSession;
+
+    //delete all Sessions in the session array as well as the currennt ssession object
 }
 
 void NeuresetDevice::startSession() {
@@ -24,16 +29,22 @@ void NeuresetDevice::startSession() {
 
 void NeuresetDevice::pauseSession() {
     // Logic to pause the current session
+    headset ->disconnectElectrodes();
     sessionState = false;
+
+
 }
 
 void NeuresetDevice::resumeSession() {
     // Logic to resume the current session
+    headset->connectElectrodes();
     sessionState = true;
 }
 
 void NeuresetDevice::endSession() {
     // Logic to end the current session, may involve cleaning up the Session object
+    headset->endElectrodeOperations();
+    sessionState = false;
 }
 
 Session* NeuresetDevice::getCurrentSession() const {
@@ -53,14 +64,17 @@ void NeuresetDevice::lowBattery() {
 
 void NeuresetDevice::powerOff() {
     // Logic to power off the device
+    headset->endElectrodeOperations();
     currentSession = nullptr;
     sessionState = false;
-    sessionProgression = 0;
+    noOfSessions = 0;
+
 }
 
 void NeuresetDevice::handleConnectionLost(){
     emit contactLost();
 }
+
 
 int NeuresetDevice::getBatteryLevel() {
     return batteryLevel;
@@ -69,3 +83,58 @@ int NeuresetDevice::getBatteryLevel() {
 void NeuresetDevice::setBatteryLevel(int level) {
     batteryLevel = level;
 }
+
+
+
+Electrode* NeuresetDevice::displayElectrode(int newId, int oldId) {
+
+
+    //qDebug()<< "inside neuroset device update displayed electrode";
+    return headset->updateElectrodeInDisplay(newId, oldId);
+}
+
+
+
+void NeuresetDevice::initializeSessionObject(QString startingTime){
+    currentSession  =  new Session(noOfSessions);
+    noOfSessions++;
+
+    currentSession->setStartTime(startingTime);
+
+}
+
+
+
+void NeuresetDevice::storeSessionObject(){ // should only be usedd if the session was successful completed
+
+    SessionArchive.append(currentSession);
+
+}
+
+
+
+void NeuresetDevice::printAllSessions(){
+
+    for(int i=0; i< SessionArchive.size(); i++){
+        SessionArchive.at(i)->toString();
+    }
+}
+
+
+void NeuresetDevice::updateSessionObject(int identifier, QVector<double> dominants){
+
+    if(identifier == 0){ // 0 = initial frequencies
+        currentSession->setInitialDominantsAndBaseline(dominants);
+    }
+    else if(identifier == 1){ // 1 = final frequencies
+        currentSession->setFinalDominantsAndBaseline(dominants);
+
+    }
+
+}
+
+
+
+
+
+

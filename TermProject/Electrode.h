@@ -17,6 +17,7 @@ private:
 
 
 
+
     // randomly generated frequencies and amplitudes during operation
     double opFrequency1 = 0 ; // delta band
     double opFrequency2 = 0; // theta  band
@@ -26,38 +27,50 @@ private:
     double opAmplitude2 = 0;
     double opAmplitude3 = 0;
 
+
+    double currentDominatFrequency = 0;
     double wavefunction; // combined function of 3 sine waves
 
+    QTimer *disconnectedTimer;
     QTimer *operationTimer;
     int operationTimeElapsed;
 public:
     Electrode(int id); // Constructor that takes an ID
     ~Electrode(); // Destructor
 
+    // Potentially more functions/variables related to signal measurement
+
+    int getId();
     bool checkConnection();
     void connectElectrode();
     void disconnectElectrode();
 
+    void initiateOperation();
+    void endOperation();
+
+    void applyTreatment();
 
 
-    // Potentially more functions/variables related to signal measurement
+    double calculateWaveFormYCoordinate(int time); // x ccoordinate of waveform is just the time
+    double getRandomDouble(double min, double max);
+    double calculateDominant();
+
+
 
     QVector<double> xGraphForm; // initialize empty vectors to store operation graph data coordinates
     QVector<double> yGraphForm;
 
-    double calculateWaveFormYCoordinate(int time); // x ccoordinate of waveform is just the time
+     bool inDisplay =  false;  // this is to limit which electrode can print in the terminal
 
-    double getRandomDouble(double min, double max){
-        return min + QRandomGenerator::global()->generateDouble() * (max - min);
-    };
-
-    void initiateOperation();
-    void cleanUpOperation();
 
 
 private slots:
     void runOperation();
+    void operationEndSequence();
 
+
+signals:
+    void dominantFrequency(int electrodeId, double df);
 
 
 };
