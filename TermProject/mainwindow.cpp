@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sessionTimer(new QTimer(this)),
     elapsedTime(0),
     contactLostTimer(new QTimer(this)),
-    sessionDuration(5*60),  // this is changed to 60 later in start session
+    sessionDuration(5*60),  // this is changed to 50 later in start session
     contactEstablished(false),
     redLightOn(false)
 {
@@ -270,7 +270,7 @@ void MainWindow::startNewSession() {
         updateButtonStates();
         ui->mainDisplay->setCurrentIndex(1);
         elapsedTime = 0;
-        sessionDuration = 60;
+        sessionDuration = 50;
         sessionTimer->start();
         ui->sessionProgressBar->setValue(0);
 
@@ -303,7 +303,7 @@ void MainWindow::updateSessionProgress() {
         int seconds = elapsedTime % 60;
         ui->sessionTimerLabel->setText(QString("%1:%2").arg(minutes, 2, 10, QLatin1Char('0')).arg(seconds, 2, 10, QLatin1Char('0')));
 
-        //PROGRESS BAR UPDATING TO BE FINISHED
+        //PROGRESS BAR UPDATING
         int progress = static_cast<int>((static_cast<double>(elapsedTime) / sessionDuration) * 100);
         ui->sessionProgressBar->setValue(progress); // Update progress bar
         updateWavePlot();
@@ -452,6 +452,7 @@ void MainWindow::updateButtonStates()
 }
 
 void MainWindow::populateSessionLog(){
+    ui->sessionLogList->clear();
     for(int  i = 0; i < neuresetDevice->getSessionArchive().size(); ++i){
         ui->sessionLogList->addItem(new QListWidgetItem(neuresetDevice->getSessionArchive().at(i)->getStartTime()));
     }
