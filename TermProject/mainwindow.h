@@ -34,6 +34,8 @@ private slots:
     void setBatteryLevel(int);
     void handleDeadBattery();
     void updateButtonStates();
+    void populateSessionLog();
+    void onSessionClicked();
 
     //Menu Slots
     void startNewSession();

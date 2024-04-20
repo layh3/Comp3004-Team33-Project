@@ -34,6 +34,7 @@ public:
     void powerOff();
     void handleConnectionLost();
     Electrode* displayElectrode(int newId, int oldId);
+    QVector<Session*> getSessionArchive();
 
     //----------------------------------------
     //void activateHeadset();

@@ -103,10 +103,12 @@ MainWindow::MainWindow(QWidget *parent) :
     onSubmitDateTimeSetting(); // running this so that selected date time has something initially
 
     //Addition SessionLogButtons
-     connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
+    connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
 
-     connect(neuresetDevice, &NeuresetDevice::gOn, this, &MainWindow::turnOnGreenLight);
-     connect(neuresetDevice, &NeuresetDevice::gOff, this, &MainWindow::turnOffGreenLight);
+    connect(neuresetDevice, &NeuresetDevice::gOn, this, &MainWindow::turnOnGreenLight);
+    connect(neuresetDevice, &NeuresetDevice::gOff, this, &MainWindow::turnOffGreenLight);
+
+    connect(ui->sessionLogList, &QListWidget::itemClicked, this, &MainWindow::onSessionClicked);
 
 }
 
@@ -349,6 +351,7 @@ void MainWindow::sessionTimeout() {
 void MainWindow::showSessionLog() {
     // Show session log view
     ui->mainDisplay->setCurrentIndex(3);
+    populateSessionLog();
 
 }
 
@@ -448,5 +451,14 @@ void MainWindow::updateButtonStates()
     ui->pushButtonStop->setEnabled(sessionActive);
 }
 
+void MainWindow::populateSessionLog(){
+    for(int  i = 0; i < neuresetDevice->getSessionArchive().size(); ++i){
+        ui->sessionLogList->addItem(new QListWidgetItem(neuresetDevice->getSessionArchive().at(i)->getStartTime()));
+    }
+}
+
+void MainWindow::onSessionClicked() {
+    //implement PC loading here
+}
 
 

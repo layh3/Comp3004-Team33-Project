@@ -29,7 +29,9 @@ double Session::calculateBaseline(QVector<double>& dominants) {
 }
 
 
-
+const QString& Session::getStartTime() const {
+    return startTime;
+}
 
 void Session::setStartTime(QString startingTime){
     startTime = startingTime;

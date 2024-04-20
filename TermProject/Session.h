@@ -32,6 +32,7 @@ public:
     double calculateBaseline(QVector<double>& dominants);
     //void applyTreatment(); // this is redundant treatment is applied in the electrode  class
 
+    const QString& getStartTime() const;
     void setStartTime(QString startingTime);
     void setInitialDominantsAndBaseline(QVector<double>& domFrequencies );
     void setFinalDominantsAndBaseline(QVector<double>& domFrequencies);

@@ -143,6 +143,9 @@ void NeuresetDevice::recGreenOff() {
     emit gOff();
 }
 
+QVector<Session*> NeuresetDevice::getSessionArchive(){
+    return SessionArchive;
+}
 
 
 
