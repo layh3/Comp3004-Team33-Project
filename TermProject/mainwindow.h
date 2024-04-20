@@ -33,6 +33,7 @@ private slots:
     void updateBatteryIndicatorStyle(int);
     void setBatteryLevel(int);
     void handleDeadBattery();
+    void updateButtonStates();
 
     //Menu Slots
     void startNewSession();
@@ -67,6 +68,7 @@ private:
     bool redLightOn;
     Electrode* ElectrodeInDisplay = 0;
     QDateTime selectedDateTime;
+    bool sessionActive = false;
 
 };
 #endif // MAINWINDOW_H

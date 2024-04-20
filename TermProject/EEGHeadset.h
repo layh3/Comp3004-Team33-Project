@@ -33,10 +33,14 @@ public:
 
 private slots:
     void recievefrequency(int electrodeId, double domFreq);
+    void recieveLightOn();
+    void recieveLightOff();
 
 signals:
     void connectionLost();
     void frequencyList(int identifier, QVector<double> dominants);  // sends the collected dom freqs to the device, the identifier is used to separate the initial(=0) and final(=1) freqs
+    void gLightOn();
+    void gLightOff();
 };
 
 #endif // EEGHEADSET_H

@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->menuButton, &QPushButton::clicked, [this]() {
 
         //>>>>>>>>>>>   check for power on here otherwise seesion is started even if powerr is off
+        if(!powerOn) return;
         ui->mainDisplay->setCurrentIndex(0); // Show menu page
     });
 
@@ -73,6 +74,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // adding response to neuroset battery power lost
     connect(neuresetDevice, &NeuresetDevice::deadBattery, this, &MainWindow::sessionTimeout);
 
+    ui->pushButtonPlay->setEnabled(sessionActive);
+    ui->pushButtonPause->setEnabled(sessionActive);
+    ui->pushButtonStop->setEnabled(sessionActive);
+
 
     // setup default electrode info display
     ui->electrodeSelection->setValue(0);
@@ -99,6 +104,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Addition SessionLogButtons
      connect(ui->CancelButton_2, &QPushButton::clicked, this, &MainWindow::onCancelMenuSetting);
+
+     connect(neuresetDevice, &NeuresetDevice::gOn, this, &MainWindow::turnOnGreenLight);
+     connect(neuresetDevice, &NeuresetDevice::gOff, this, &MainWindow::turnOffGreenLight);
 
 }
 
@@ -149,6 +157,8 @@ void MainWindow::onStopClicked() {
     turnOffRedLight();
     turnOffBlueLight();
     turnOffGreenLight();
+    sessionActive = false;
+    updateButtonStates();
 }
 
 void MainWindow::onPowerButtonClicked() {
@@ -169,6 +179,8 @@ void MainWindow::onPowerButtonClicked() {
         turnOffRedLight();
         turnOffBlueLight();
         turnOffGreenLight();
+        sessionActive = false;
+        updateButtonStates();
     }
 
 }
@@ -239,6 +251,7 @@ void MainWindow::startNewSession() {
     // Initialize session state, start the timer, session object, etc.
     qDebug() << "Starting Session";
 
+
     // create new session object
     neuresetDevice->initializeSessionObject(selectedDateTime.toString("yyyy-MM-dd HH:mm:ss"));
 
@@ -251,6 +264,8 @@ void MainWindow::startNewSession() {
         contactLostTimer->start();
     } else {
         //Successful contact results in session starting
+        sessionActive = true;
+        updateButtonStates();
         ui->mainDisplay->setCurrentIndex(1);
         elapsedTime = 0;
         sessionDuration = 60;
@@ -294,6 +309,9 @@ void MainWindow::updateSessionProgress() {
         if (elapsedTime >= sessionDuration) {
             sessionTimer->stop(); // Session complete
             qDebug() << "Session Complete";
+            sessionActive = false;
+            updateButtonStates();
+            turnOffBlueLight();
 
             // store the sucessfully completed session object
             neuresetDevice->storeSessionObject();
@@ -422,6 +440,13 @@ void MainWindow::updateWavePlot() { // used in displaying waveform
     ui->wavePlot->replot();
 }
 
+void MainWindow::updateButtonStates()
+{
+    // Enable or disable buttons based on the session state
+    ui->pushButtonPlay->setEnabled(sessionActive);
+    ui->pushButtonPause->setEnabled(sessionActive);
+    ui->pushButtonStop->setEnabled(sessionActive);
+}
 
 
 

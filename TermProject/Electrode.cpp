@@ -3,7 +3,7 @@
 
 
 
-Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnectedTimer(new QTimer(this)), operationTimer(new QTimer(this)) {
+Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnectedTimer(new QTimer(this)), operationTimer(new QTimer(this)), treatmentTimer(new QTimer(this)) {
     // Initialize the electrode with the given ID and as disconnected
     // initialize the operation and disconnection timers
 
@@ -12,6 +12,7 @@ Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnected
 
     connect(operationTimer, &QTimer::timeout, this, &Electrode::runOperation);
     connect(disconnectedTimer, &QTimer::timeout, this, &Electrode::operationEndSequence);
+    connect(treatmentTimer, &QTimer::timeout, this, &Electrode::emitGreenLightOff);
 }
 
 Electrode::~Electrode() {
@@ -76,7 +77,9 @@ void Electrode::disconnectElectrode() {
          int seconds = operationTimeElapsed % 60;
 
          // check time and apply treatment here?
-         applyTreatment();
+         if (operationTimeElapsed % 10 == 0) {
+            applyTreatment();
+         }
 
          xGraphForm.append(seconds);
          yGraphForm.append( calculateWaveFormYCoordinate(seconds) );
@@ -161,12 +164,26 @@ void Electrode::disconnectElectrode() {
 
 
 
+     double averageFrequency;
+
+     emit greenLightOn();
+     averageFrequency = (opFrequency1 + opFrequency2 + opFrequency3);
+     if(inDisplay){ qInfo("Electrode %d: Phase 1 treatment, average frequency is: %f Treatment frequency is %f", electrodeId, averageFrequency, averageFrequency + 5); }
+     opFrequency1 += 1;
+     opFrequency2 += 1;
+     opFrequency3 += 1;
+     treatmentTimer->start(1000);
+
      // the rest of the my algorithm wwill automatically calulate y coorordinates with ur defined treatment adjustment as it uses the frequency bands in its calculation
 
  }
 
 
+void Electrode::emitGreenLightOff(){
 
+    emit greenLightOff();
+    treatmentTimer->stop();
+}
 
 
 
