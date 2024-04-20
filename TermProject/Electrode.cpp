@@ -77,7 +77,7 @@ void Electrode::disconnectElectrode() {
          int seconds = operationTimeElapsed % 60;
 
          // check time and apply treatment here?
-         if (operationTimeElapsed % 10 == 1) {
+         if (operationTimeElapsed % 10 == 1 && operationTimeElapsed > 5) {
             applyTreatment();
          }
 
