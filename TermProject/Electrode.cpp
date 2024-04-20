@@ -154,27 +154,17 @@ void Electrode::disconnectElectrode() {
 
  void Electrode::applyTreatment(){
 
-     // define ur treatment here, also sync the mainwindow ui lights while this happens
-
-     // the goal is to make the current ui graph gradually change its shape over time, but u should doeble check the specs
-     // my idea was to just calculate dominant frequency addd thhe offsset of 5 hertz
-     // then add this new nnumber to all the  frequency bands in this class
-     // while printing the relevant info in terminal
-     // reapeat this 4 times/rounds at 4 different time intervals - if statemnts maybe?
-
-
 
      double averageFrequency;
 
      emit greenLightOn();
      averageFrequency = (opFrequency1 + opFrequency2 + opFrequency3);
-     if(inDisplay){ qInfo("Electrode %d: Phase 1 treatment, average frequency is: %f Treatment frequency is %f", electrodeId, averageFrequency, averageFrequency + 5); }
+     if(inDisplay){ qInfo("Electrode %d: Treatment beginning, average frequency is: %f Treatment frequency is %f", electrodeId, averageFrequency, averageFrequency + 5); }
      opFrequency1 += 1;
      opFrequency2 += 1;
      opFrequency3 += 1;
      treatmentTimer->start(1000);
 
-     // the rest of the my algorithm wwill automatically calulate y coorordinates with ur defined treatment adjustment as it uses the frequency bands in its calculation
 
  }
 
