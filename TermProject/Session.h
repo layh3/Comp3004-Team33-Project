@@ -1,24 +1,45 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-#include <vector>
+#include <QVector>
 #include <string>
-#include "TreatmentProtocol.h"
+#include <QObject>
+#include "EEGHeadset.h"
 
-class Session {
+class Session: public QObject {
+
+    Q_OBJECT
+
 private:
+    // the duration of each session is fixed at 60 seconds so it does not have to be recorded, although the electrode operations are 50 seconds
+
     int sessionId;
-    std::string startTime;
-    std::string endTime;
-    std::vector<float> baselineFrequencies;
-    TreatmentProtocol currentTreatmentProtocol;
+    QString startTime = "start time not set";
+    //std::string endTime;
+    //TreatmentProtocol currentTreatmentProtocol; // remove
+
+    QVector<double> intialDominants;
+    QVector<double> finalDominants;
+
+    double intialBaseline;
+    double finalBaseline;
 
 public:
     Session(int id); // Constructor that takes an ID
     ~Session(); // Destructor
 
-    void calculateBaseline();
-    void applyTreatment();
+    double calculateBaseline(QVector<double>& dominants);
+    //void applyTreatment(); // this is redundant treatment is applied in the electrode  class
+
+    const QString& getStartTime() const;
+    void setStartTime(QString startingTime);
+    void setInitialDominantsAndBaseline(QVector<double>& domFrequencies );
+    void setFinalDominantsAndBaseline(QVector<double>& domFrequencies);
+
+    void toString();
+
+    QString getInitialBaseline() const;
+    QString getFinalBaseline() const;
 };
 
 #endif // SESSION_H
