@@ -18,6 +18,8 @@ EEGHeadset::EEGHeadset(QObject *parent) : QObject(parent), isConnected(false) {
     // set up headset to recieve frequency from each electrode
     for (int i = 0; i < ELECTRODE_NUMBER; ++i){
         connect(electrodes.at(i), &Electrode::dominantFrequency, this, &EEGHeadset::recievefrequency);
+        connect(electrodes.at(i), &Electrode::greenLightOn, this, &EEGHeadset::recieveLightOn);
+        connect(electrodes.at(i), &Electrode::greenLightOff, this, &EEGHeadset::recieveLightOff);
     }
 
 }
@@ -138,10 +140,10 @@ void EEGHeadset::recievefrequency(int electrodeId, double domFreq) {
 
 }
 
+void EEGHeadset::recieveLightOn() {
+    emit gLightOn();
+}
 
-
-
-
-
-
-
+void EEGHeadset::recieveLightOff() {
+    emit gLightOff();
+}

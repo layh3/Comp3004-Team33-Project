@@ -1,6 +1,7 @@
 
 
 
+
 // do not use this class it doenst allow the program to compile to replace it im just making an array inside the neuroset device
 // use that to update the ui
 

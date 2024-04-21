@@ -34,6 +34,7 @@ public:
     void powerOff();
     void handleConnectionLost();
     Electrode* displayElectrode(int newId, int oldId);
+    QVector<Session*> getSessionArchive();
 
     //----------------------------------------
     //void activateHeadset();
@@ -47,10 +48,14 @@ public:
 
 private slots:
     void updateSessionObject(int identifier, QVector<double> dominants); // this updates the session object automatically u just have to iniitialize it
+    void recGreenOn();
+    void recGreenOff();
 
 signals:
     void contactLost();
     void deadBattery();
+    void gOn();
+    void gOff();
 };
 
 #endif // NEURESETDEVICE_H

@@ -33,6 +33,7 @@ private:
 
     QTimer *disconnectedTimer;
     QTimer *operationTimer;
+    QTimer *treatmentTimer;
     int operationTimeElapsed;
 public:
     Electrode(int id); // Constructor that takes an ID
@@ -54,13 +55,15 @@ public:
     double calculateWaveFormYCoordinate(int time); // x ccoordinate of waveform is just the time
     double getRandomDouble(double min, double max);
     double calculateDominant();
+    void emitGreenLightOff();
 
 
 
     QVector<double> xGraphForm; // initialize empty vectors to store operation graph data coordinates
     QVector<double> yGraphForm;
 
-     bool inDisplay =  false;  // this is to limit which electrode can print in the terminal
+    bool inDisplay =  false;  // this is to limit which electrode can print in the terminal
+
 
 
 
@@ -71,6 +74,8 @@ private slots:
 
 signals:
     void dominantFrequency(int electrodeId, double df);
+    void greenLightOn();
+    void greenLightOff();
 
 
 };

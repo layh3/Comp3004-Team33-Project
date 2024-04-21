@@ -3,7 +3,7 @@
 
 
 
-Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnectedTimer(new QTimer(this)), operationTimer(new QTimer(this)) {
+Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnectedTimer(new QTimer(this)), operationTimer(new QTimer(this)), treatmentTimer(new QTimer(this)) {
     // Initialize the electrode with the given ID and as disconnected
     // initialize the operation and disconnection timers
 
@@ -12,6 +12,7 @@ Electrode::Electrode(int id) : electrodeId(id), isConnected(false), disconnected
 
     connect(operationTimer, &QTimer::timeout, this, &Electrode::runOperation);
     connect(disconnectedTimer, &QTimer::timeout, this, &Electrode::operationEndSequence);
+    connect(treatmentTimer, &QTimer::timeout, this, &Electrode::emitGreenLightOff);
 }
 
 Electrode::~Electrode() {
@@ -76,7 +77,9 @@ void Electrode::disconnectElectrode() {
          int seconds = operationTimeElapsed % 60;
 
          // check time and apply treatment here?
-         applyTreatment();
+         if (operationTimeElapsed % 10 == 1 && operationTimeElapsed > 5) {
+            applyTreatment();
+         }
 
          xGraphForm.append(seconds);
          yGraphForm.append( calculateWaveFormYCoordinate(seconds) );
@@ -151,22 +154,26 @@ void Electrode::disconnectElectrode() {
 
  void Electrode::applyTreatment(){
 
-     // define ur treatment here, also sync the mainwindow ui lights while this happens
 
-     // the goal is to make the current ui graph gradually change its shape over time, but u should doeble check the specs
-     // my idea was to just calculate dominant frequency addd thhe offsset of 5 hertz
-     // then add this new nnumber to all the  frequency bands in this class
-     // while printing the relevant info in terminal
-     // reapeat this 4 times/rounds at 4 different time intervals - if statemnts maybe?
+     double averageFrequency;
 
+     emit greenLightOn();
+     averageFrequency = (opFrequency1 + opFrequency2 + opFrequency3);
+     if(inDisplay){ qInfo("Electrode %d: Treatment beginning, average frequency is: %f Treatment frequency is %f", electrodeId, averageFrequency, averageFrequency + 5); }
+     opFrequency1 += 1;
+     opFrequency2 += 1;
+     opFrequency3 += 1;
+     treatmentTimer->start(1000);
 
-
-     // the rest of the my algorithm wwill automatically calulate y coorordinates with ur defined treatment adjustment as it uses the frequency bands in its calculation
 
  }
 
 
+void Electrode::emitGreenLightOff(){
 
+    emit greenLightOff();
+    treatmentTimer->stop();
+}
 
 
 
@@ -202,16 +209,3 @@ void Electrode::disconnectElectrode() {
 
     return wavefunction;
  }
-
-
-
-
-
-
-
-
-
-
-
-
-

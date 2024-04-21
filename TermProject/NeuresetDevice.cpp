@@ -10,6 +10,8 @@ NeuresetDevice::NeuresetDevice(QObject *parent) : QObject(parent), batteryLevel(
 
     // set up response for incoming session object data
     connect(headset, &EEGHeadset::frequencyList, this, &NeuresetDevice::updateSessionObject);
+    connect(headset, &EEGHeadset::gLightOn, this, &NeuresetDevice::recGreenOn);
+    connect(headset, &EEGHeadset::gLightOff, this, &NeuresetDevice::recGreenOff);
 }
 
 NeuresetDevice::~NeuresetDevice() {
@@ -133,8 +135,14 @@ void NeuresetDevice::updateSessionObject(int identifier, QVector<double> dominan
 
 }
 
+void NeuresetDevice::recGreenOn() {
+    emit gOn();
+}
 
+void NeuresetDevice::recGreenOff() {
+    emit gOff();
+}
 
-
-
-
+QVector<Session*> NeuresetDevice::getSessionArchive(){
+    return SessionArchive;
+}

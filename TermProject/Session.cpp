@@ -29,7 +29,9 @@ double Session::calculateBaseline(QVector<double>& dominants) {
 }
 
 
-
+const QString& Session::getStartTime() const {
+    return startTime;
+}
 
 void Session::setStartTime(QString startingTime){
     startTime = startingTime;
@@ -66,9 +68,10 @@ void Session::toString(){
 }
 
 
+QString Session::getInitialBaseline() const {
+    return QString::number(intialBaseline, 'f', 2); // Convert double to QString with 2 decimal places
+}
 
-
-
-
-
-
+QString Session::getFinalBaseline() const {
+    return QString::number(finalBaseline, 'f', 2); // Convert double to QString with 2 decimal places
+}
