@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     contactLostTimer(new QTimer(this)),
     sessionDuration(5*60),  // this is changed to 50 later in start session
     contactEstablished(false),
-    redLightOn(false)
+    redLightOn(false),
+    operationTimer(nullptr)
 {
     ui->setupUi(this);
     ui->pcUiWidget->setVisible(false);
