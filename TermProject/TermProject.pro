@@ -14,8 +14,6 @@ SOURCES += \
     NeuresetDevice.cpp \
     PCSoftware.cpp \
     Session.cpp \
-    SessionLog.cpp \
-    TreatmentProtocol.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp
@@ -26,8 +24,6 @@ HEADERS += \
     NeuresetDevice.h \
     PCSoftware.h \
     Session.h \
-    SessionLog.h \
-    TreatmentProtocol.h \
     mainwindow.h \
     qcustomplot.h
 

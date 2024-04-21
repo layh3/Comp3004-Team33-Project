@@ -1,7 +1,6 @@
 #ifndef PCSOFTWARE_H
 #define PCSOFTWARE_H
 
-#include "SessionLog.h" // Include the SessionLog header
 
 class PCSoftware {
 private:

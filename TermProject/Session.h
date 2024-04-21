@@ -4,7 +4,6 @@
 #include <QVector>
 #include <string>
 #include <QObject>
-#include "TreatmentProtocol.h"
 #include "EEGHeadset.h"
 
 class Session: public QObject {
