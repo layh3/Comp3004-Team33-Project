@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pcUiWidget->setVisible(false);
 
 
-
     //pause, play and stop button clicks
     connect(ui->pushButtonPlay, &QPushButton::clicked, this, &MainWindow::onPlayClicked);
     connect(ui->pushButtonPause, &QPushButton::clicked, this, &MainWindow::onPauseClicked);
@@ -304,6 +303,7 @@ void MainWindow::updateSessionProgress() {
         int seconds = elapsedTime % 60;
         ui->sessionTimerLabel->setText(QString("%1:%2").arg(minutes, 2, 10, QLatin1Char('0')).arg(seconds, 2, 10, QLatin1Char('0')));
 
+
         //PROGRESS BAR UPDATING
         int progress = static_cast<int>((static_cast<double>(elapsedTime) / sessionDuration) * 100);
         ui->sessionProgressBar->setValue(progress); // Update progress bar
@@ -315,6 +315,7 @@ void MainWindow::updateSessionProgress() {
             sessionActive = false;
             updateButtonStates();
             turnOffBlueLight();
+
 
             // store the sucessfully completed session object
             neuresetDevice->storeSessionObject();
@@ -360,8 +361,6 @@ void MainWindow::showDateTimeSetting() {
     // Show date and time setting UI
     ui->mainDisplay->setCurrentIndex(2);
 }
-
-
 
 
 void MainWindow::onCancelMenuSetting() {

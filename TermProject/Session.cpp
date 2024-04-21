@@ -75,5 +75,3 @@ QString Session::getInitialBaseline() const {
 QString Session::getFinalBaseline() const {
     return QString::number(finalBaseline, 'f', 2); // Convert double to QString with 2 decimal places
 }
-
-

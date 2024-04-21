@@ -1,3 +1,4 @@
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -5,7 +6,6 @@
 #include <QDebug>
 #include <QDateTime>
 #include "NeuresetDevice.h"
-#include <QDateTime>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,9 +34,6 @@ private slots:
     void updateBatteryIndicatorStyle(int);
     void setBatteryLevel(int);
     void handleDeadBattery();
-    void updateButtonStates();
-    void populateSessionLog();
-
 
     //Menu Slots
     void startNewSession();
@@ -47,17 +44,10 @@ private slots:
     void showDateTimeSetting();
     void onCancelMenuSetting();
     void onSubmitDateTimeSetting();
-    void viewSelectedSession();
-    void hidePcUiWidget();
-
 
     //Internal Clock
     void startTimedOperations();
     void performTimedOperation();
-
-    // wave generation
-    void startWavePlot();
-    void updateWavePlot();
 
 private:
     Ui::MainWindow *ui;
@@ -70,11 +60,7 @@ private:
     NeuresetDevice *neuresetDevice;
     QTimer *redLightTimer;
     bool redLightOn;
-    Electrode* ElectrodeInDisplay = 0;
     QDateTime selectedDateTime;
-    QTimer *operationTimer;
-    bool sessionActive = false;
-
 };
 #endif // MAINWINDOW_H
 

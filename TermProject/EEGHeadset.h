@@ -44,4 +44,3 @@ signals:
 };
 
 #endif // EEGHEADSET_H
-

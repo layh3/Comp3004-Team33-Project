@@ -147,9 +147,3 @@ void EEGHeadset::recieveLightOn() {
 void EEGHeadset::recieveLightOff() {
     emit gLightOff();
 }
-
-
-
-
-
-

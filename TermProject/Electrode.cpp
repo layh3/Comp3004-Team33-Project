@@ -209,16 +209,3 @@ void Electrode::emitGreenLightOff(){
 
     return wavefunction;
  }
-
-
-
-
-
-
-
-
-
-
-
-
-
