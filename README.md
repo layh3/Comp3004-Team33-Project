@@ -21,7 +21,9 @@ deliverables folder:
 - `RequirementsTraceabilityMatrix.png`: An image mapping the project's requirements to their corresponding tests and implementation to ensure coverage.
 - `UMLClass.png`: The UML class diagram depicting the structure and relationships of the system's classes.
 - `lowBatterySequence.png`: A sequence diagram that describes the scenario when the system detects a low battery condition.
+
 TermProject folder consisting of files to be compiled by Qt Creator.
+
 ## Project Testing Video
 
 For an in-depth understanding of our testing procedures and results, please refer to the Project Testing Video - https://youtu.be/6amwnQYzjWk
